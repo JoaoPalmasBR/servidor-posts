@@ -1,20 +1,13 @@
 {
-  "name": "servidor-posts",
+  "name": "fastify-server",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Servidor Fastify para Render",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "@faker-js/faker": "^9.5.0",
-    "body-parser": "^1.20.3",
-    "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "faker-js": "^1.0.0",
-    "fastify": "^5.2.1"
+    "fastify": "^4.22.2",
+    "@faker-js/faker": "^8.2.0"
   }
 }
