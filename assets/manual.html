@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manual de Deploy Fastify no Render</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 20px;
+        padding: 20px;
+        background-color: #f4f4f4;
+      }
+      .container {
+        max-width: 800px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1,
+      h2 {
+        color: #333;
+      }
+      code {
+        background: #eee;
+        padding: 2px 5px;
+        border-radius: 4px;
+      }
+      pre {
+        background: #222;
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Manual de Deploy Fastify no Render</h1>
+
+      <h2>1) Criar o Servidor Fastify (<code>server.js</code>)</h2>
+      <pre><code>const Fastify = require("fastify");
+const { faker } = require("@faker-js/faker");
+
+const fastify = Fastify({ logger: true });
+const PORT = process.env.PORT || 3000;
+
+let posts = Array.from({ length: 50 }, (_, i) => ({
+  id: i + 1,
+  mensagem: faker.lorem.sentence(),
+  usuario: faker.number.int({ min: 1, max: 10 }),
+}));
+
+fastify.get("/posts", async (request, reply) => {
+  return posts;
+});
+
+fastify.listen({ port: PORT, host: "0.0.0.0" }, (err) => {
+  if (err) {
+    fastify.log.error(err);
+    process.exit(1);
+  }
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
+});</code></pre>
+
+      <h2>2) Criar o <code>package.json</code></h2>
+      <pre><code>{
+  "name": "fastify-server",
+  "version": "1.0.0",
+  "description": "Servidor Fastify para Render",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "fastify": "^4.22.2",
+    "@faker-js/faker": "^8.2.0"
+  }
+}</code></pre>
+
+      <h2>3) Deploy no Render</h2>
+      <ol>
+        <li>Crie um repositório no GitHub e suba os arquivos.</li>
+        <li>
+          Acesse <a href="https://render.com/" target="_blank">Render.com</a> e
+          faça login.
+        </li>
+        <li>Clique em "New Web Service".</li>
+        <li>Conecte seu repositório GitHub.</li>
+        <li>
+          Defina as configurações:
+          <ul>
+            <li><strong>Build Command:</strong> <code>npm install</code></li>
+            <li><strong>Start Command:</strong> <code>npm start</code></li>
+            <li><strong>Runtime:</strong> Node.js</li>
+          </ul>
+        </li>
+        <li>Clique em "Deploy".</li>
+      </ol>
+
+      <h2>4) Testar a API</h2>
+      <p>
+        Após o deploy, Render criará uma URL, ex:
+        <code>https://meu-fastify-server.onrender.com/posts</code>
+      </p>
+
+      <h3>Listar posts:</h3>
+      <pre><code>GET https://meu-fastify-server.onrender.com/posts</code></pre>
+
+      <h3>Criar um post:</h3>
+      <pre><code>POST https://meu-fastify-server.onrender.com/posts
+Content-Type: application/json
+{
+  "mensagem": "Novo post no Fastify!",
+  "usuario": 7
+}</code></pre>
+    </div>
+  </body>
+</html>
