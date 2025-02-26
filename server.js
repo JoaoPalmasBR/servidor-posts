@@ -7,7 +7,7 @@ const fastify = Fastify({ logger: true });
 const PORT = process.env.PORT || 3000;
 
 // Gerar 50 posts aleatórios
-let posts = Array.from({ length: 50 }, (_, i) => ({
+let posts = Array.from({ length: 5 }, (_, i) => ({
   id: i + 1,
   mensagem: faker.lorem.sentence(),
   usuario: faker.number.int({ min: 1, max: 10 }),
